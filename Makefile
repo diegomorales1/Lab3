@@ -1,13 +1,14 @@
-# Makefile para MV1: Broker
+# Makefile para MV2: Jayce y Servidor hextech 1
 
 build:
-	sudo docker-compose build broker
+	sudo docker-compose build jayce server1
 
 up:
-	sudo docker-compose up broker
+	sudo docker-compose up jayce server1
 
-broker:
-	sudo docker-compose up -d broker
+jayce:
+	sudo docker-compose up -d jayce server1
+	sudo docker attach jayce
 
 
 stop:
@@ -17,6 +18,6 @@ down:
 	sudo docker-compose down
 
 logs:
-	sudo docker-compose logs -f broker
+	sudo docker-compose logs -f jayce server1
 
-.PHONY: build up attach_broker down logs
+.PHONY: build up attach_jayce down logs
