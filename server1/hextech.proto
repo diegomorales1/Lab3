@@ -1,0 +1,73 @@
+syntax = "proto3";
+package hextech;
+option go_package = "grpc-server/proto;hextech";
+
+service Broker {
+  rpc ProcessCommand(CommandRequest) returns (CommandResponse);
+  rpc ObtenerProducto(CommandRequest) returns (CommandResponse);
+  rpc GetClockByRegion(RegionRequest) returns (ClockResponse); // Obtener reloj por región
+  rpc GetClock(ClockRequest) returns (ClockResponse);
+  rpc DistributeLogs(LogRequest) returns (MergeResponse);
+  rpc DistributeRegions(FileRequest) returns (MergeResponse);
+  rpc GetFile (FileRequest) returns (FileResponse);
+  rpc ReceiveMergedFile (FileRequest) returns (FileResponse); 
+  rpc ReceiveMergedFile2 (FileRequest) returns (FileResponse);
+}
+
+message CommandRequest {
+  string command = 1;
+  string region = 2;
+  string productName = 3;
+  string value = 4; // Puede ser vacío
+  int32 server = 5;
+}
+
+message FileRequest {
+    string filename = 1;
+    bytes content = 2;
+}
+
+message FileResponse { 
+    string content = 1;
+}
+
+message CommandResponse {
+  int32 randomValue = 1; // Valor aleatorio entre 0 y 2
+  string message = 2;
+  string value = 3;
+  repeated int32 relojVectorial = 4;
+}
+
+
+message ClockEntry {
+  string region = 1;
+  repeated int32 clock = 2;
+}
+
+message ClocksRequest {
+  repeated ClockEntry clocks = 1; // Lista de regiones con sus relojes
+}
+
+message EmptyRequest {}
+
+message ClockRequest {
+  string region = 1;
+}
+
+message ClockResponse {
+  repeated int32 clock = 1;
+  int32 servidor = 2;
+}
+
+message LogRequest {
+  string logData = 1;
+  repeated int32 clock = 2;
+}
+
+message MergeResponse {
+  string status = 1;
+}
+
+message RegionRequest {
+  string region = 1;
+}
