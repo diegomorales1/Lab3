@@ -1,0 +1,83 @@
+services:
+
+  server1:
+    build:
+      context: ./server1
+      dockerfile: Dockerfile
+    container_name: server1
+    ports:
+      - "50052:50052"
+    networks:
+      - test_network
+
+  server2:
+    build:
+      context: ./server2
+      dockerfile: Dockerfile
+    container_name: server2
+    ports:
+      - "50053:50053"
+    networks:
+      - test_network
+
+  server3:
+    build:
+      context: ./server3
+      dockerfile: Dockerfile
+    container_name: server3
+    ports:
+      - "50054:50054"
+    networks:
+      - test_network
+
+  supervisor1:
+    build:
+      context: ./supervisor1
+      dockerfile: Dockerfile
+    container_name: supervisor1
+    networks:
+      - test_network
+    depends_on:
+      - broker
+    stdin_open: true
+    tty: true
+
+  supervisor2:
+    build:
+      context: ./supervisor2
+      dockerfile: Dockerfile
+    container_name: supervisor2
+    networks:
+      - test_network
+    depends_on:
+      - broker
+    stdin_open: true
+    tty: true
+
+  jayce:
+    build:
+      context: ./jayce
+      dockerfile: Dockerfile
+    container_name: jayce
+    networks:
+      - test_network
+    depends_on:
+      - broker
+    stdin_open: true
+    tty: true
+
+  broker:
+    build:
+      context: ./broker
+      dockerfile: Dockerfile
+    container_name: broker
+    depends_on:
+      - server1
+      - server2
+      - server3
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    external: true
